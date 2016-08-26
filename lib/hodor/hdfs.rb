@@ -4,13 +4,19 @@ Bundler.require(:default)
 module Hodor
   module Hdfs
     class << self
-      def before_command(command, trailing)
-        puts "Preprocessing #{command}  and  #{trailing}"
+
+      def command_pending(command, trailing)
+        puts "Pending: #{command}  and  #{trailing}"
         false
       end
 
-      def after_command(command, trailing)
-        puts "Post processing #{command}  and  #{trailing}"
+      def command_succeeded(command, trailing)
+        puts "Success: #{command}  and  #{trailing}"
+        false
+      end
+
+      def command_failed(command, trailing, exception)
+        puts "FAILED! #{command}  and  #{trailing} with exception #{exception.to_s}"
       end
 
       def env
@@ -235,4 +241,4 @@ module Hodor
   end
 end
 
-Hodor::Environment.instance.register_plugin(Hodor::Hdfs)
+Hodor::Environment.instance.register_listener(Hodor::Hdfs)
